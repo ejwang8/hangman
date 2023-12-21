@@ -3,9 +3,6 @@ import random
 import requests
 from bs4 import BeautifulSoup
 
-def generalScraper(): # have not implemented yet
-    return ['Pink Birthday']
-
 def movieScraper(): # have not implemented
     r2 = requests.get('https://www.imdb.com/list/ls055592025/')
     soup = BeautifulSoup(r2.content, 'html.parser')
@@ -34,19 +31,21 @@ response = input("Would you like to play (y/anything else = no)? ")
 if response != 'y':
     quit()
 
-category = input("Would you like to pick a category (general, movies, music)? ")
+category = input("Would you like to pick a category (movies, music)? ")
 words = None
 if category == 'movies':
-    print("\nYou have selected Movies. (Please wait while it loads)\n")
+    print("\nYou have selected the Movies category. (Please wait while it loads)\n")
     words = movieScraper()
 elif category == 'music':
-    print("\nYou have selected Music.\n")
+    print("\nYou have selected the Music category.\n")
     words = musicScraper()
 else:
-    print("Not a valid answer. Randomly selecting category. (Please wait while it loads)")
+    print("Not a valid answer. Randomly selecting category.")
     if random.randint(0,1) == 0:
+        print("Randomly selecting Movies category (Please wait while it loads)")
         words = movieScraper()
     else:
+        print("Randomly selecting Music category")
         words = musicScraper()
 
 randomIndex = random.randint(1, len(words)) - 1
@@ -55,7 +54,11 @@ choice = originalChoice.lower()
 phrase = choice.split(" ")
 wordProgress = []
 for word in phrase:
-    wordProgress += ["_"] * len(word)
+    for letter in word:
+        if letter == "'":
+            wordProgress += ["'"]
+        else:
+            wordProgress += ["_"]
     wordProgress += [" "]
 guesses = set()
 hangman = "\n"
